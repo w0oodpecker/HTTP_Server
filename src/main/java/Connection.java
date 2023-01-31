@@ -25,7 +25,6 @@ public class Connection extends Thread {
 
     @Override
     public void run() {
-        System.out.println("Поток открылся: " + this.threadId());
         // read only request line for simplicity
         // must be in form GET /path HTTP/1.1
         try {
@@ -42,7 +41,6 @@ public class Connection extends Thread {
                 socket.close();
                 in.close();
                 out.close();
-                System.out.println("Поток закрылся: " + this.threadId());
             } catch (IOException e) {
             }
         }
