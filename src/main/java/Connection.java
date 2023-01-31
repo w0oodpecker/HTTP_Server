@@ -16,9 +16,8 @@ public class Connection extends Thread {
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             out = new BufferedOutputStream(socket.getOutputStream());
             processor = Processor.getInstance();
-            this.start();
-        }
-        catch (IOException exc){
+            //this.start(); Нельзя чтобы сам себя запускал, убрал
+        } catch (IOException exc) {
             System.out.println(Main.ERRORMSG);
         }
     }
@@ -26,17 +25,26 @@ public class Connection extends Thread {
 
     @Override
     public void run() {
+        System.out.println("Поток открылся: " + this.threadId());
         // read only request line for simplicity
         // must be in form GET /path HTTP/1.1
         try {
             while (!interrupted()) {
                 final String requestLine = in.readLine();
-                if(requestLine != null) {
+                if (requestLine != null) {
                     final Answer answer = processor.toProcess(requestLine);
                     this.send(answer);
                 }
             }
         } catch (IOException exc) {
+        } finally {
+            try {
+                socket.close();
+                in.close();
+                out.close();
+                System.out.println("Поток закрылся: " + this.threadId());
+            } catch (IOException e) {
+            }
         }
     }
 

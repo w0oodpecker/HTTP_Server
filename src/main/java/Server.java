@@ -17,7 +17,7 @@ public class Server extends Thread {
             this.settings = settings;
             this.serverSocket = new ServerSocket(settings.getServerPort());
             service = Executors.newFixedThreadPool(settings.getThreadBound());
-            this.start();
+            //this.start(); Нельзя чтобы поток сам себя стартовал, убрал
         } catch (IOException exc) {
             System.out.println(Main.ERRORMSG);
         }
@@ -31,9 +31,12 @@ public class Server extends Thread {
                 final Socket socket = serverSocket.accept();
                 service.submit(new Connection(socket));
             } catch (IOException e) {
-                throw new RuntimeException(e);
             }
         }
         service.shutdown();
+        try {
+            serverSocket.close();
+        } catch (IOException e) {
+        }
     }
 }
