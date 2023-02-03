@@ -18,12 +18,14 @@ public class Processor {
     }
 
 
-    public Answer toProcess(String requestLine) {
+    public Answer toProcess(String request) {
 
         final List<String> validPaths = List.of("/index.html", "/spring.svg", "/spring.png", "/resources.html", "/styles.css", "/app.js", "/links.html", "/forms.html", "/classic.html", "/events.html", "/events.js");
         // read only request line for simplicity
         // must be in form GET /path HTTP/1.1
-        final String[] parts = requestLine.split(" ");
+        final String[] requestSplitted = request.split("\r\n");
+        final String[] parts = requestSplitted[0].split(" ");
+
 
         try {
             if (parts.length != 3) {
@@ -87,4 +89,6 @@ public class Processor {
         }
         return instance;
     }
+
+
 }

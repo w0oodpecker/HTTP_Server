@@ -27,11 +27,17 @@ public class Connection extends Thread {
     public void run() {
         // read only request line for simplicity
         // must be in form GET /path HTTP/1.1
+
         try {
+            final int limit = Settings.getInstance(Main.nameOfSettingsFile).getBufferLimit();
+            in.mark(limit);
             while (!interrupted()) {
-                final String requestLine = in.readLine();
-                if (requestLine != null) {
-                    final Answer answer = processor.toProcess(requestLine);
+                if (in.ready()) {
+                    //final String requestLine = in.readLine();
+                    final char[] buffer = new char[limit];
+                    final var read = in.read(buffer, 0, limit);
+                    //System.out.println(new String(buffer, 0, read));
+                    final Answer answer = processor.toProcess(new String(buffer, 0, read));
                     this.send(answer);
                 }
             }
