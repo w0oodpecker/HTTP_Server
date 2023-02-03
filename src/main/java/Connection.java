@@ -62,8 +62,10 @@ public class Connection extends Thread {
                     out.write(answer.getContent());
                     out.flush();
                 }
-                Files.copy(answer.getFilePath(), out);
-                out.flush();
+                if(answer.getFilePath() != null) {
+                    Files.copy(answer.getFilePath(), out);
+                    out.flush();
+                }
             }
         } catch (IOException exc) {
             System.out.println(Main.ERRORMSG);

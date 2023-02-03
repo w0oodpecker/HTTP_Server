@@ -41,6 +41,7 @@ public class Processor {
                                 "Connection: close\r\n" +
                                 "\r\n"
                 ).getBytes();
+                return new Answer(message, null,null);
             }
 
             filePath = Path.of(".", "public", path);
@@ -66,7 +67,7 @@ public class Processor {
             try {
                 length = Files.size(filePath);
             } catch (IOException exc) {
-                return new Answer(message, content, filePath);
+                return new Answer(message, content, null);
             }
 
             message = (
