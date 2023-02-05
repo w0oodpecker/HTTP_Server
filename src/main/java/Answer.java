@@ -14,6 +14,13 @@ public class Answer {
         this.filePath = filePath;
     }
 
+    Answer(byte[] message){
+        this.message = message;
+        this.content = null;
+        this.filePath = null;
+    }
+
+
     public byte[] getContent() {
         return content;
     }
